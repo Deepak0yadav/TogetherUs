@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import { io } from 'socket.io-client';
 import Game from '../game/Game';
 import GameHUD from '../components/GameHUD';
+import CharacterSelect from '../components/CharacterSelect';
 
 const WatchMode = lazy(() => import('../components/WatchMode'));
 const FocusMode = lazy(() => import('../components/FocusMode'));
@@ -47,6 +48,9 @@ export default function Apartment() {
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [character, setCharacter] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('togetheros-character')); } catch { return null; }
+  });
   const [socket, setSocket] = useState(null);
   const [activeZone, setActiveZone] = useState(null);
   const mediaStreamRef = useRef(null);
@@ -315,6 +319,16 @@ export default function Apartment() {
     }
   }
 
+  // ── Character selection ────────────────────────────────────────
+  if (!character) {
+    return (
+      <CharacterSelect onSelect={(c) => {
+        localStorage.setItem('togetheros-character', JSON.stringify(c));
+        setCharacter(c);
+      }} />
+    );
+  }
+
   // ── Main game view ──────────────────────────────────────────
   return (
     <div style={{
@@ -363,7 +377,7 @@ export default function Apartment() {
         paddingTop: 48,
         paddingBottom: 88,
       }}>
-        <Game roomId={room.id} layoutJson={room.layout_json} socket={socket} />
+        <Game roomId={room.id} layoutJson={room.layout_json} socket={socket} character={character} />
       </div>
 
       <OverlayErrorBoundary onClose={closeOverlay}>

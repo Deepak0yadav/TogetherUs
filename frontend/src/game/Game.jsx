@@ -20,7 +20,7 @@ const config = {
   physics: { default: 'arcade' },
 };
 
-export default function Game({ roomId, layoutJson, socket }) {
+export default function Game({ roomId, layoutJson, socket, character }) {
   const gameRef = useRef(null);
   const containerRef = useRef(null);
   const user = useAuthStore((s) => s.user);
@@ -40,6 +40,7 @@ export default function Game({ roomId, layoutJson, socket }) {
                 myUserId: user.id,
                 myUserName: user.name || user.email || 'You',
                 positions: res.positions || {},
+                character: character || { gender: 'male', palette: 'amber' },
               });
             });
           };

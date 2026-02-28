@@ -10,11 +10,16 @@ export default class RoomScene extends Phaser.Scene {
     this.socket = data?.socket;
     this.myUserId = data?.myUserId;
     this.myUserName = data?.myUserName || 'You';
+    this.myCharacter = data?.character || { gender: 'male', palette: 'amber' };
     this.avatars = {};
     this.avatarGridPos = {};
     this.initialPositions = data?.positions || {};
     this.myDirection = 'down';
     this.currentZone = null;
+    this.walkFrame = 0;
+    this.walkTimer = 0;
+    this.WALK_FRAME_INTERVAL = 120;
+    this.isMoving = false;
   }
 
   create() {
@@ -39,7 +44,7 @@ export default class RoomScene extends Phaser.Scene {
     const spawn = this.findSpawnTile(13, 7);
     const startX = spawn.x * ts + ts / 2;
     const startY = spawn.y * ts + ts / 2;
-    this.myAvatar = this.createAvatar(startX, startY, 'amber', this.myUserName, true);
+    this.myAvatar = this.createAvatar(startX, startY, this.myCharacter.palette, this.myUserName, true, this.myCharacter.gender);
     this.myAvatar.setData('userId', this.myUserId);
     this.cameras.main.startFollow(this.myAvatar, true, 0.1, 0.1);
 
@@ -666,12 +671,16 @@ export default class RoomScene extends Phaser.Scene {
     return { g, text, bw };
   }
 
-  createAvatar(px, py, paletteKey, name, isMe) {
+  createAvatar(px, py, paletteKey, name, isMe, gender) {
+    const g = gender || (isMe ? this.myCharacter.gender : 'male');
     const container = this.add.container(px, py);
-    const sprite = drawPixelCharacter(this, -AVATAR_WIDTH / 2, -AVATAR_PIXEL_SIZE, paletteKey, 'down');
+    const sprite = drawPixelCharacter(this, -AVATAR_WIDTH / 2, -AVATAR_PIXEL_SIZE, paletteKey, 'down', g, 0);
     container.add(sprite);
     container.setData('sprite', sprite);
     container.setData('paletteKey', paletteKey);
+    container.setData('gender', g);
+    container.setData('walkFrame', 0);
+    container.setData('direction', 'down');
     if (isMe) {
       const ring = this.add.graphics();
       ring.lineStyle(3, 0x60a5fa, 0.85);
@@ -686,13 +695,17 @@ export default class RoomScene extends Phaser.Scene {
     return container;
   }
 
-  setAvatarDirection(container, direction) {
+  setAvatarDirection(container, direction, walkFrame) {
     const sprite = container.getData('sprite');
     const paletteKey = container.getData('paletteKey') || 'amber';
+    const gender = container.getData('gender') || 'male';
+    const frame = walkFrame !== undefined ? walkFrame : (container.getData('walkFrame') || 0);
     if (sprite) sprite.destroy();
-    const newSprite = drawPixelCharacter(this, -AVATAR_WIDTH / 2, -AVATAR_PIXEL_SIZE, paletteKey, direction);
+    const newSprite = drawPixelCharacter(this, -AVATAR_WIDTH / 2, -AVATAR_PIXEL_SIZE, paletteKey, direction, gender, frame);
     container.addAt(newSprite, 0);
     container.setData('sprite', newSprite);
+    container.setData('direction', direction);
+    container.setData('walkFrame', frame);
   }
 
   restorePositions(positions) {
@@ -712,9 +725,10 @@ export default class RoomScene extends Phaser.Scene {
     let avatar = this.avatars[userId];
     const px = x * ts + ts / 2, py = y * ts + ts / 2;
     if (!avatar) {
-      const palettes = CHARACTER_PALETTES.filter(p => p !== 'amber');
-      const paletteKey = palettes[Object.keys(this.avatars).length % palettes.length];
-      avatar = this.createAvatar(px, py, paletteKey, name || 'Partner', false);
+      const palettes = CHARACTER_PALETTES.filter(p => p !== this.myCharacter.palette);
+      const paletteKey = palettes[Object.keys(this.avatars).length % palettes.length] || 'rose';
+      const partnerGender = this.myCharacter.gender === 'male' ? 'female' : 'male';
+      avatar = this.createAvatar(px, py, paletteKey, name || 'Partner', false, partnerGender);
       this.avatars[userId] = avatar;
     }
     avatar.setPosition(px, py);
@@ -747,13 +761,30 @@ export default class RoomScene extends Phaser.Scene {
     else if (this.cursors.right.isDown || this.wasd.right.isDown) dx = 1;
     else if (this.cursors.up.isDown || this.wasd.up.isDown) dy = -1;
     else if (this.cursors.down.isDown || this.wasd.down.isDown) dy = 1;
-    if (dx === 0 && dy === 0) return;
+
+    if (dx === 0 && dy === 0) {
+      if (this.isMoving) {
+        this.isMoving = false;
+        this.walkFrame = 0;
+        this.setAvatarDirection(this.myAvatar, this.myDirection, 0);
+      }
+      return;
+    }
+
+    this.isMoving = true;
 
     const dir = dy < 0 ? 'up' : dy > 0 ? 'down' : dx < 0 ? 'left' : 'right';
+
+    if (time - this.walkTimer > this.WALK_FRAME_INTERVAL) {
+      this.walkTimer = time;
+      this.walkFrame = this.walkFrame === 1 ? 2 : 1;
+    }
+
     if (dir !== this.myDirection) {
       this.myDirection = dir;
-      this.setAvatarDirection(this.myAvatar, dir);
     }
+    this.setAvatarDirection(this.myAvatar, dir, this.walkFrame);
+
     if (time - this.lastMove < this.MOVE_THROTTLE) return;
     this.lastMove = time;
 
