@@ -7,6 +7,7 @@ import { registerZoneHandlers } from './modules/socket/zone-handlers.js';
 import { registerWatchHandlers } from './modules/socket/watch-handlers.js';
 import { registerFocusHandlers } from './modules/socket/focus-handlers.js';
 import { registerWebRTCHandlers } from './modules/socket/webrtc-handlers.js';
+import { registerChatHandlers } from './modules/socket/chat-handlers.js';
 
 let io;
 
@@ -25,6 +26,7 @@ export function initSocket(server) {
     registerWatchHandlers(io, socket);
     registerFocusHandlers(io, socket);
     registerWebRTCHandlers(io, socket);
+    registerChatHandlers(io, socket);
   });
 
   return io;

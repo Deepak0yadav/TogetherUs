@@ -5,6 +5,10 @@ import { io } from 'socket.io-client';
 import Game from '../game/Game';
 import GameHUD from '../components/GameHUD';
 import CharacterSelect from '../components/CharacterSelect';
+import ChatPanel from '../components/ChatPanel';
+import EmojiReactions from '../components/EmojiReactions';
+import ScreenShare from '../components/ScreenShare';
+import SettingsPanel from '../components/SettingsPanel';
 
 const WatchMode = lazy(() => import('../components/WatchMode'));
 const FocusMode = lazy(() => import('../components/FocusMode'));
@@ -56,6 +60,10 @@ export default function Apartment() {
   const mediaStreamRef = useRef(null);
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const [screenShareOpen, setScreenShareOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const token = useAuthStore((s) => s.token);
 
   useEffect(() => {
@@ -93,16 +101,36 @@ export default function Apartment() {
 
   const setMediaStream = useCallback((stream) => { mediaStreamRef.current = stream; }, []);
 
-  const toggleMic = useCallback(() => {
-    const track = mediaStreamRef.current?.getAudioTracks()[0];
-    if (track) { track.enabled = !track.enabled; setMicOn(track.enabled); }
-    else setMicOn((v) => !v);
+  const toggleMic = useCallback(async () => {
+    if (mediaStreamRef.current) {
+      const track = mediaStreamRef.current.getAudioTracks()[0];
+      if (track) { track.enabled = !track.enabled; setMicOn(track.enabled); return; }
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      setMicOn(true);
+    } catch {
+      setMicOn((v) => !v);
+    }
   }, []);
 
-  const toggleCam = useCallback(() => {
-    const track = mediaStreamRef.current?.getVideoTracks()[0];
-    if (track) { track.enabled = !track.enabled; setCamOn(track.enabled); }
-    else setCamOn((v) => !v);
+  const toggleCam = useCallback(async () => {
+    if (mediaStreamRef.current) {
+      const track = mediaStreamRef.current.getVideoTracks()[0];
+      if (track) { track.enabled = !track.enabled; setCamOn(track.enabled); return; }
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (mediaStreamRef.current) {
+        stream.getTracks().forEach((t) => mediaStreamRef.current.addTrack(t));
+      } else {
+        mediaStreamRef.current = stream;
+      }
+      setCamOn(true);
+    } catch {
+      setCamOn((v) => !v);
+    }
   }, []);
 
   async function loadSpaceData() {
@@ -348,6 +376,11 @@ export default function Apartment() {
         camOn={camOn}
         onToggleMic={toggleMic}
         onToggleCam={toggleCam}
+        chatOpen={chatOpen}
+        onToggleChat={() => setChatOpen((v) => !v)}
+        onToggleEmoji={() => setEmojiOpen((v) => !v)}
+        onToggleScreenShare={() => setScreenShareOpen((v) => !v)}
+        onOpenSettings={() => setSettingsOpen(true)}
       />
 
       {/* Copy feedback toast */}
@@ -401,6 +434,23 @@ export default function Apartment() {
           )}
         </Suspense>
       </OverlayErrorBoundary>
+
+      {/* Chat panel */}
+      <ChatPanel socket={socket} open={chatOpen} onClose={() => setChatOpen(false)} />
+
+      {/* Emoji reactions (always mounted for receiving; picker is toggled) */}
+      <EmojiReactions socket={socket} open={emojiOpen} onClose={() => setEmojiOpen(false)} />
+
+      {/* Screen share */}
+      <ScreenShare socket={socket} open={screenShareOpen} onClose={() => setScreenShareOpen(false)} />
+
+      {/* Settings */}
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        character={character}
+        onCharacterChange={setCharacter}
+      />
     </div>
   );
 }
