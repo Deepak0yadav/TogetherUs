@@ -9,6 +9,17 @@ import { buildObjectRegistry } from './ObjectRegistry.js';
 
 const INTERACT_KEY = 'X';
 
+/** Safe tile adjacent to door (for tweening player out before close). */
+function getSafeTileForDoor(doorObj) {
+  if (!doorObj?.doorData) return null;
+  const { seg, axis } = doorObj.doorData;
+  if (axis === 'v') {
+    const x = seg.x - 1 >= 0 ? seg.x - 1 : seg.x + 1;
+    return { gx: x, gy: seg.door.y1 };
+  }
+  return { gx: seg.door.x1, gy: seg.y - 1 >= 0 ? seg.y - 1 : seg.y + 1 };
+}
+
 export class InteractionManager {
   constructor(scene, stateMachine, roomCollisionManager = null) {
     this.scene = scene;
@@ -87,7 +98,7 @@ export class InteractionManager {
 
   /**
    * Update: detect zone, show hint or trigger interaction.
-   * @returns {{ inZone: boolean, object: object|null, shouldLock: boolean }}
+   * @returns {{ inZone: boolean, object: object|null, shouldLock: boolean, position?: number[], tweenOutThenCloseDoor?: boolean, safeTile?: { gx: number, gy: number }, doorData?: object }}
    */
   update(gx, gy) {
     const obj = this.getObjectAt(gx, gy);
@@ -104,6 +115,12 @@ export class InteractionManager {
 
       if (this.isInteractKeyDown()) {
         if (obj.interactionType === 'door' && obj.doorData && this.roomCollisionManager) {
+          const isOpen = this.roomCollisionManager.isDoorOpen(obj.doorData.seg, obj.doorData.axis);
+          if (isOpen && obj.doorTiles?.has(`${gx},${gy}`)) {
+            this.showHint('Step away to close door');
+            const safe = getSafeTileForDoor(obj);
+            return { inZone, object: obj, shouldLock: false, tweenOutThenCloseDoor: true, safeTile: safe, doorData: obj.doorData };
+          }
           this.roomCollisionManager.toggleDoor(obj.doorData.seg, obj.doorData.axis);
           this.scene.rebuildWallCollision?.();
           return { inZone, object: obj, shouldLock: false };

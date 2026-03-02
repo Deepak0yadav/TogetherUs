@@ -24,7 +24,9 @@ function buildDoorRegistry() {
   WALL_SEGMENTS.vertical.forEach((seg) => {
     if (!seg.door) return;
     const zone = new Set();
+    const doorTiles = new Set();
     for (let y = seg.door.y1; y <= seg.door.y2; y++) {
+      doorTiles.add(`${seg.x},${y}`);
       if (seg.x > 0) zone.add(`${seg.x - 1},${y}`);
       zone.add(`${seg.x + 1},${y}`);
     }
@@ -34,6 +36,7 @@ function buildDoorRegistry() {
         furnitureType: 'door',
         interactionType: 'door',
         interactionZone: zone,
+        doorTiles,
         snapPosition: null,
         animationState: null,
         requiresKeyPress: true,
@@ -46,7 +49,9 @@ function buildDoorRegistry() {
   WALL_SEGMENTS.horizontal.forEach((seg) => {
     if (!seg.door) return;
     const zone = new Set();
+    const doorTiles = new Set();
     for (let x = seg.door.x1; x <= seg.door.x2; x++) {
+      doorTiles.add(`${x},${seg.y}`);
       zone.add(`${x},${seg.y - 1}`);
       zone.add(`${x},${seg.y + 1}`);
     }
@@ -56,6 +61,7 @@ function buildDoorRegistry() {
         furnitureType: 'door',
         interactionType: 'door',
         interactionZone: zone,
+        doorTiles,
         snapPosition: null,
         animationState: null,
         requiresKeyPress: true,
