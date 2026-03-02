@@ -27,6 +27,6 @@ export function registerZoneHandlers(io, socket) {
     const redis = getRedis();
     const key = activeZoneKey(socket.roomId);
     await redis.hdel(key, socket.user.id);
-    socket.to(socket.roomId).emit('zone:left', { userId: socket.user.id });
+    io.to(socket.roomId).emit('zone:left', { userId: socket.user.id });
   });
 }

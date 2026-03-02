@@ -14,7 +14,7 @@ const WatchMode = lazy(() => import('../components/WatchMode'));
 const FocusMode = lazy(() => import('../components/FocusMode'));
 const ProximityVideo = lazy(() => import('../components/ProximityVideo'));
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || '';
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
 const ZONE_MODE_MAP = { lounge: 'watch', office: 'focus', garden: 'video' };
 
@@ -411,6 +411,7 @@ export default function Apartment() {
         right: 0,
         bottom: 88,
         minHeight: 200,
+        zIndex: 1,
       }}>
         <Game roomId={room.id} layoutJson={room.layout_json} socket={socket} character={character} />
       </div>

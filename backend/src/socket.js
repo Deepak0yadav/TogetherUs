@@ -12,8 +12,18 @@ import { registerChatHandlers } from './modules/socket/chat-handlers.js';
 let io;
 
 export function initSocket(server) {
+  const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
   io = new Server(server, {
-    cors: { origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true },
+    cors: {
+      origin: (origin, cb) => {
+        if (!origin || origin === allowedOrigin || /^http:\/\/localhost:51\d{2}$/.test(origin)) {
+          cb(null, true);
+        } else {
+          cb(null, false);
+        }
+      },
+      credentials: true,
+    },
     path: '/socket.io',
   });
 

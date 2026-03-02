@@ -58,7 +58,7 @@ export default function GameHUD({
         backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(255,255,255,0.07)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 20px', zIndex: 100,
+        padding: '0 20px', zIndex: 200, pointerEvents: 'auto',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
@@ -137,7 +137,7 @@ export default function GameHUD({
       {/* ── Bottom HUD toolbar ──────────────────────────────── */}
       <div style={{
         position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)',
-        zIndex: 100, display: 'flex', alignItems: 'center', gap: 6,
+        zIndex: 200, pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 6,
         background: 'rgba(10, 10, 22, 0.88)',
         backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
         border: '1px solid rgba(255,255,255,0.1)', borderRadius: 18,

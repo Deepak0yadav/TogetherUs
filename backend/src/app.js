@@ -10,8 +10,15 @@ import coupleRoutes from './modules/auth/couple-routes.js';
 
 const app = express();
 
+const frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, cb) => {
+    if (!origin || origin === frontendOrigin || /^http:\/\/localhost:51\d{2}$/.test(origin)) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());

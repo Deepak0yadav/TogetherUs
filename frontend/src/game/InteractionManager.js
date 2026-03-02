@@ -106,7 +106,12 @@ export class InteractionManager {
     const isInteracting = this.stateMachine.isInteracting();
 
     if (isInteracting) {
-      this.hideHint();
+      this.showHint('Press X to stand up');
+      if (this.isInteractKeyDown()) {
+        this.stateMachine.enterIdle();
+        this.hideHint();
+        return { inZone: false, object: null, shouldLock: false };
+      }
       return { inZone: false, object: null, shouldLock: true };
     }
 
