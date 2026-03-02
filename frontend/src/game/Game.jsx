@@ -27,14 +27,14 @@ export default function Game({ roomId, layoutJson, socket, character }) {
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
-    if (!containerRef.current || !roomId || !user?.id || !socket) return;
+    if (!containerRef.current || !roomId || !user?.id) return;
     const game = new Phaser.Game({
       ...config,
       callbacks: {
         postBoot: (gameInstance) => {
           const sceneData = {
             layout: layoutJson || { furniture: [], theme: 'day' },
-            socket,
+            socket: socket || null,
             myUserId: user.id,
             myUserName: user.name || user.email || 'You',
             positions: {},
@@ -54,7 +54,9 @@ export default function Game({ roomId, layoutJson, socket, character }) {
             if (!started) startScene(res?.positions ?? {});
             else gameInstance.scene.getScene('RoomScene').restorePositions?.(res?.positions ?? {});
           };
-          socket.emit('room:join', roomId, onJoin);
+          if (socket) {
+            socket.emit('room:join', roomId, onJoin);
+          }
           fallbackId = setTimeout(() => {
             if (!started) startScene({});
           }, 2500);
@@ -73,12 +75,10 @@ export default function Game({ roomId, layoutJson, socket, character }) {
       style={{
         width: '100%',
         height: '100%',
-        minHeight: 400,
+        minHeight: 300,
         background: '#1a1d28',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        position: 'absolute',
+        inset: 0,
       }}
     />
   );

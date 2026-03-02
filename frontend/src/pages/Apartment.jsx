@@ -406,9 +406,11 @@ export default function Apartment() {
       {/* Full-screen Phaser canvas (padded for top/bottom HUD) */}
       <div style={{
         position: 'absolute',
-        inset: 0,
-        paddingTop: 48,
-        paddingBottom: 88,
+        top: 48,
+        left: 0,
+        right: 0,
+        bottom: 88,
+        minHeight: 200,
       }}>
         <Game roomId={room.id} layoutJson={room.layout_json} socket={socket} character={character} />
       </div>
