@@ -1,12 +1,14 @@
+import { useAuthStore } from '../store/authStore';
+
 const BASE = '/api';
 
 async function request(path, options = {}) {
   const hasBody = options.body !== undefined && options.body !== null;
 
-  // Pull token from Zustand persist storage
+  // Pull token from Zustand persist storage (must match authStore persist name)
   let token = null;
   try {
-    const raw = localStorage.getItem('auth-storage');
+    const raw = localStorage.getItem('togetheros-auth');
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed.state?.token) token = parsed.state.token;
@@ -27,6 +29,7 @@ async function request(path, options = {}) {
     headers,
   });
   const data = await res.json().catch(() => ({}));
+  if (res.status === 401) useAuthStore.getState().logout();
   if (!res.ok) throw new Error(data.error || res.statusText);
   return data;
 }

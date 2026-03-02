@@ -31,24 +31,32 @@ A **persistent virtual home for long-distance couples**. Share a pixel-art 2D ap
 
 ## Quick Start
 
-### 1. Start Postgres and Redis
+### 1. Start Docker Desktop (required)
+
+**PostgreSQL and Redis run in Docker.** You must have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and **running** before the next steps.
+
+On Windows: open Docker Desktop from the Start menu and wait until it shows "Docker Desktop is running".
+
+### 2. Start Postgres and Redis
 
 ```bash
 docker-compose up -d
 ```
 
-### 2. One-time setup
+Check that containers are running: `docker ps` — you should see `postgres` and `redis`.
+
+### 3. One-time setup
 
 ```bash
 cd backend
 cp .env.example .env
-# Edit .env if needed (DATABASE_URL, REDIS_URL, JWT_SECRET)
+# .env is preconfigured for docker-compose (port 4001 matches Vite proxy)
 npm install
 npm run db:migrate
 cd ..
 ```
 
-### 3. Run the app
+### 4. Run the app
 
 From the **project root**:
 
@@ -60,6 +68,14 @@ npm run dev
 This starts both backend (port 4001) and frontend (port 5173) concurrently.
 
 Open **http://localhost:5173**, register an account, create a space, copy the invite code, then open another browser/incognito window to join as your partner.
+
+## Troubleshooting
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `ECONNREFUSED 127.0.0.1:5432` | PostgreSQL not running | Start Docker Desktop, then run `docker-compose up -d` |
+| `Backend not running at localhost:4001` | Backend crashed (usually due to DB) | Fix PostgreSQL first; ensure `backend/.env` has `PORT=4001` |
+| `open //./pipe/dockerDesktopLinuxEngine` | Docker Desktop not running | Launch Docker Desktop and wait for it to be ready |
 
 ## Project Structure
 

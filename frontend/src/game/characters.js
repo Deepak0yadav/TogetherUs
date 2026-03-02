@@ -41,10 +41,10 @@ const MALE_DOWN = [
   r(0, 0, 0, 0, 1, 9, 2, 2, 2, 9, 1, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 0, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0),
-  r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
+  r(0, 0, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 0, 0),  // arms + hands
   r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
   r(0, 0, 2, 3, 3, 10, 3, 3, 3, 10, 3, 3, 2, 0, 0, 0),
-  r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
+  r(0, 0, 2, 2, 8, 3, 3, 3, 3, 3, 8, 2, 2, 0, 0, 0),  // arms + hands
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0),
@@ -90,10 +90,10 @@ const MALE_UP = [
   r(0, 0, 0, 0, 1, 1, 9, 9, 9, 1, 1, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 0, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0),
-  r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
+  r(0, 0, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 0, 0),
   r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
   r(0, 0, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 0, 0),
-  r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
+  r(0, 0, 2, 2, 8, 3, 3, 3, 3, 3, 8, 2, 2, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0),
@@ -117,10 +117,10 @@ const MALE_LEFT = [
   r(0, 0, 0, 0, 0, 0, 1, 9, 2, 9, 1, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 0, 0, 9, 9, 0, 0, 0, 0, 0, 0, 0),
-  r(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
+  r(0, 2, 2, 2, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),  // left hand extended
   r(0, 2, 2, 0, 3, 3, 3, 10, 3, 3, 3, 0, 0, 0, 0, 0),
-  r(0, 0, 2, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
-  r(0, 0, 2, 0, 8, 3, 3, 3, 3, 3, 8, 0, 0, 0, 0, 0),
+  r(0, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
+  r(0, 2, 2, 0, 8, 3, 3, 3, 3, 3, 8, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0),
@@ -135,6 +135,52 @@ const MALE_LEFT = [
 
 const MALE_RIGHT = MALE_LEFT.map((row) => [...row].reverse());
 
+// ─── SITTING (16×24) — seated pose, legs bent ──────────────────────────────────
+const SIT_GRID = [
+  r(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 1, 7, 7, 7, 7, 7, 1, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 1, 7, 7, 7, 7, 7, 7, 7, 1, 0, 0, 0, 0),
+  r(0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0),
+  r(0, 0, 0, 1, 2, 6, 2, 2, 2, 6, 2, 1, 0, 0, 0, 0),
+  r(0, 0, 0, 1, 2, 2, 2, 9, 2, 2, 2, 1, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 2, 2, 3, 3, 3, 3, 2, 2, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 2, 8, 3, 3, 3, 3, 8, 2, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 3, 3, 10, 3, 3, 10, 3, 3, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 4, 4, 4, 0, 0, 4, 4, 4, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 4, 4, 4, 0, 0, 4, 4, 4, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 5, 5, 5, 0, 0, 5, 5, 5, 0, 0, 0, 0),
+  r(0, 0, 0, 5, 5, 5, 5, 0, 0, 5, 5, 5, 5, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  r(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+];
+
+// ─── SLEEPING (24×12 logical) — horizontal figure, drawn as 24cols×12rows ─────
+const SLEEP_W = 24;
+const SLEEP_H = 12;
+const SLEEP_GRID = [
+  [0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,1,7,7,7,7,7,7,7,7,1,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,1,7,2,2,2,2,2,2,7,1,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,1,2,2,6,2,2,6,2,2,1,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,1,2,2,2,9,2,2,1,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,2,8,3,3,3,3,3,3,3,8,2,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,4,4,4,0,0,4,4,4,4,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,5,5,5,0,0,5,5,5,5,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,5,5,5,5,0,0,5,5,5,5,5,0,0,0,0,0],
+];
+
 // ─── FEMALE SPRITES ──────────────────────────────────────────────────────────
 
 const FEMALE_DOWN = [
@@ -148,10 +194,10 @@ const FEMALE_DOWN = [
   r(0, 0, 1, 7, 2, 2, 2, 2, 2, 2, 2, 7, 1, 0, 0, 0),
   r(0, 0, 1, 1, 7, 7, 7, 7, 7, 7, 7, 1, 1, 0, 0, 0),
   r(0, 1, 1, 0, 0, 0, 9, 9, 9, 0, 0, 0, 1, 1, 0, 0),
-  r(0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0),
+  r(0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 1, 0),
   r(0, 1, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 1, 0, 0),
   r(0, 0, 2, 3, 3, 10, 3, 3, 3, 10, 3, 3, 2, 0, 0, 0),
-  r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
+  r(0, 0, 2, 2, 8, 3, 3, 3, 3, 3, 8, 2, 2, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0),
@@ -197,10 +243,10 @@ const FEMALE_UP = [
   r(0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0),
   r(0, 0, 1, 1, 7, 7, 7, 7, 7, 7, 7, 1, 1, 0, 0, 0),
   r(0, 1, 1, 0, 0, 0, 9, 9, 9, 0, 0, 0, 1, 1, 0, 0),
-  r(0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0),
+  r(0, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 1, 0),
   r(0, 1, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 1, 0, 0),
   r(0, 0, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 0, 0),
-  r(0, 0, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 2, 0, 0, 0),
+  r(0, 0, 2, 2, 8, 3, 3, 3, 3, 3, 8, 2, 2, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0),
   r(0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0),
@@ -224,10 +270,10 @@ const FEMALE_LEFT = [
   r(0, 0, 0, 0, 0, 1, 7, 2, 2, 7, 1, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 1, 1, 7, 7, 1, 1, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 1, 1, 0, 9, 9, 0, 1, 1, 0, 0, 0, 0),
-  r(0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0),
+  r(0, 2, 2, 2, 1, 3, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0),
   r(0, 2, 2, 0, 1, 3, 3, 10, 3, 3, 3, 1, 0, 0, 0, 0),
-  r(0, 0, 2, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
-  r(0, 0, 2, 0, 0, 8, 3, 3, 3, 3, 8, 0, 0, 0, 0, 0),
+  r(0, 2, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
+  r(0, 2, 2, 0, 0, 8, 3, 3, 3, 3, 8, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0),
   r(0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0),
@@ -253,19 +299,22 @@ function ensureGrid(grid) {
   return out;
 }
 
-// Walk frames: up/down have 2 walk frames, left/right share idle
+// Walk frames + sit (same for both genders)
+const SIT_FRAMES = [ensureGrid(SIT_GRID)];
 const SPRITES = {
   male: {
     down:  [ensureGrid(MALE_DOWN), ensureGrid(MALE_DOWN_WALK1), ensureGrid(MALE_DOWN_WALK2)],
     up:    [ensureGrid(MALE_UP)],
     left:  [ensureGrid(MALE_LEFT)],
     right: [ensureGrid(MALE_RIGHT)],
+    sit:   SIT_FRAMES,
   },
   female: {
     down:  [ensureGrid(FEMALE_DOWN), ensureGrid(FEMALE_DOWN_WALK1), ensureGrid(FEMALE_DOWN_WALK2)],
     up:    [ensureGrid(FEMALE_UP)],
     left:  [ensureGrid(FEMALE_LEFT)],
     right: [ensureGrid(FEMALE_RIGHT)],
+    sit:   SIT_FRAMES,
   },
 };
 
@@ -316,11 +365,11 @@ export const PALETTES = {
   },
 };
 
-const PIXEL_SCALE = 3;
+const PIXEL_SCALE = 2;  // 32x48px — Gather Town style, proportional to 32px tiles
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
-export function drawPixelCharacter(scene, x, y, paletteKey = 'amber', direction = 'down', gender = 'male', walkFrame = 0) {
+export function drawPixelCharacter(scene, x, y, paletteKey = 'amber', direction = 'down', gender = 'male', walkFrame = 0, emote = null) {
   const pal = PALETTES[paletteKey] || PALETTES.amber;
   const colorMap = {
     1: pal.hair, 7: pal.hairHL, 2: pal.skin, 9: pal.skinShadow,
@@ -328,19 +377,37 @@ export function drawPixelCharacter(scene, x, y, paletteKey = 'amber', direction 
     3: pal.shirt, 8: pal.shirtShadow, 10: pal.shirtHL,
     4: pal.pants, 5: pal.shoes,
   };
+  const p = PIXEL_SCALE;
 
+  if (emote === 'sleeping') {
+    const g = scene.add.graphics();
+    g.x = x;
+    g.y = y;
+    for (let row = 0; row < SLEEP_H; row++) {
+      for (let col = 0; col < SLEEP_W; col++) {
+        const cell = SLEEP_GRID[row]?.[col];
+        if (!cell) continue;
+        const color = colorMap[cell];
+        if (color === undefined) continue;
+        g.fillStyle(color, 1);
+        g.fillRect(col * p, row * p, p, p);
+      }
+    }
+    return g;
+  }
+
+  const dir = emote === 'sitting' ? 'sit' : direction;
   const genderSprites = SPRITES[gender] || SPRITES.male;
-  const frames = genderSprites[direction] || genderSprites.down;
-  const grid = frames[walkFrame % frames.length];
+  const frames = genderSprites[dir] || genderSprites.down;
+  const grid = frames[walkFrame % (frames?.length || 1)];
 
   const g = scene.add.graphics();
   g.x = x;
   g.y = y;
-  const p = PIXEL_SCALE;
 
   for (let row = 0; row < H; row++) {
     for (let col = 0; col < W; col++) {
-      const cell = grid[row][col];
+      const cell = grid[row]?.[col];
       if (!cell) continue;
       const color = colorMap[cell];
       if (color === undefined) continue;
@@ -353,5 +420,7 @@ export function drawPixelCharacter(scene, x, y, paletteKey = 'amber', direction 
 
 export const AVATAR_PIXEL_SIZE = H * PIXEL_SCALE;
 export const AVATAR_WIDTH = W * PIXEL_SCALE;
+export const AVATAR_SLEEP_WIDTH = SLEEP_W * PIXEL_SCALE;
+export const AVATAR_SLEEP_HEIGHT = SLEEP_H * PIXEL_SCALE;
 export const CHARACTER_PALETTES = Object.keys(PALETTES);
 export const GENDERS = ['male', 'female'];

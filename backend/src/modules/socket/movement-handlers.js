@@ -5,7 +5,7 @@ const POSITION_TTL = 60;
 export function registerMovementHandlers(io, socket) {
   socket.on('move', async (payload) => {
     if (!socket.roomId) return;
-    const { x, y, direction } = payload;
+    const { x, y, direction, emote } = payload;
     if (typeof x !== 'number' || typeof y !== 'number') return;
     const data = JSON.stringify({
       userId: socket.user.id,
@@ -13,6 +13,7 @@ export function registerMovementHandlers(io, socket) {
       x,
       y,
       direction: direction ?? 'down',
+      emote: emote ?? null,
       updatedAt: Date.now(),
     });
     const redis = getRedis();
@@ -25,6 +26,7 @@ export function registerMovementHandlers(io, socket) {
       x,
       y,
       direction: direction ?? 'down',
+      emote: emote ?? null,
     });
   });
 }
